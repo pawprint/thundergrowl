@@ -62,6 +62,7 @@ var growlgntp = function () {
 	};
 
 	function processNewItem(item, pMsg) {
+    var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("growlgntp-thunderbird.");
     var vState = "Added";
     var msg = null;
 		try {
@@ -74,9 +75,9 @@ var growlgntp = function () {
 			if (msg.isRead) return;
 
       var folder = msg.folder;
-      var junkscore = msg.getStringProperty("junkscore");
+      //var junkscore = msg.getStringProperty("junkscore");
 
-      if(junkscore > 50) return;
+      //if(junkscore > 50) return;
       if(folder.isSpecialFolder((nsMsgFolderFlags.Drafts|nsMsgFolderFlags.Trash|nsMsgFolderFlags.Junk|nsMsgFolderFlags.Sent), false)) return;
 
 			var uri = msg.folder.getUriForMsg(msg);
@@ -91,31 +92,45 @@ var growlgntp = function () {
 
 				growlgntp.rssqueue.push({ type: "newrss", title: "New Post: "+folder.prettiestName+": ", message: msg.mime2DecodedSubject, callbackContext: uri, callbackType: "rss" });
 				growlgntp.newrsstimer = window.setTimeout(growlgntp.processRssQueue, 1000);
-			}
-			else {
+			}else {
 				if (growlgntp.newmailtimer) window.clearTimeout(growlgntp.newmailtimer);
 
-				var author = msg.mime2DecodedAuthor,
-            subject = msg.mime2DecodedSubject,
-            regex = /<([^>]*)>|"*([^<>"]*)/,
-            match = regex.exec(author);
-            rxFolder = prefs.getStringPref("growlgntp-thunderbird.folderregexpref"),
-            rxSubject = prefs.getStringPref("growlgntp-thunderbird.subjectregexpref"),
-            rxSender = prefs.getStringPref("growlgntp-thunderbird.senderregexpref");
+				var author = msg.mime2DecodedAuthor;
+        var subject = msg.mime2DecodedSubject;
 
-        if(rxFolder != '') {
-          var rxpFolder = new RegExp(rxFolder);
-          if(rxpFolder.exec(folder.prettiestName)) return;
-        }
+        var regex = /<([^>]*)>|"*([^<>"]*)/;
+        var match = regex.exec(author);
 
-        if(rxSender != '') {
-          var rxpSender = new RegExp(rxSender);
-          if(rxpSender.exec(author)) return;
-        }
+dump("growl: Applying Filters");
+        try {
+          if(prefs.prefHasUserValue("folderregexpref")) {
+            var rxFolder  = prefs.getCharPref("folderregexpref");
+            if(rxFolder) {
+  dump("growl: Folders Filter "+rxFolder);
+              var rxpFolder = new RegExp(rxFolder);
+              if(rxpFolder.exec(folder.prettiestName)) return;
+            }
+          }
 
-        if(rxSubject != '') {
-          var rxpSubject = new RegExp(rxSubject);
-          if(rxpSender.exec(subject)) return;
+          if(prefs.prefHasUserValue("senderregexpref")) {
+            var rxSender  = prefs.getCharPref("senderregexpref");
+            if(rxSender) {
+  dump("growl: Filtering Senders "+rxSender);
+              var rxpSender = new RegExp(rxSender);
+              if(rxpSender.exec(author)) return;
+            }
+          }
+
+          if(prefs.prefHasUserValue("subjectregexpref")) {
+            var rxSubject = prefs.getCharPref("subjectregexpref");
+            if(rxSubject) {
+  dump("growl: Filtering Subjects "+rxSubject);
+              var rxpSubject = new RegExp(rxSubject);
+              if(rxpSubject.exec(subject)) return;
+            }
+          }
+        } catch(e) {
+          dump(e);
         }
 
 				if (match) author = match[1] || match[2];
