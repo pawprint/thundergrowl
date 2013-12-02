@@ -8,6 +8,7 @@
       <preference id="maxmailnotificationspref" name="growlgntp-thunderbird.maxmailnotifications" type="int"/>
       <preference id="maxrssnotificationspref" name="growlgntp-thunderbird.maxrssnotifications" type="int"/>
       <preference id="folderregexpref" name="growlgntp-thunderbird.folderregexpref" type="string"/>
+      <preference id="subjectregexpref" name="growlgntp-thunderbird.subjectregexpref" type="string"/>
       <preference id="senderregexpref" name="growlgntp-thunderbird.senderregexpref" type="string"/>
     </preferences>
     <label id="labelpasswordpref" control="textboxpasswordpref">&passwordpref.label;</label>
@@ -22,6 +23,9 @@
 
     <label id="labelFolderRexegPref" control="textboxFolderRegexPref">&folderregexpref.label;</label>
     <textbox id="textboxFolderRegexPref" preference="folderregexpref"/>
+
+    <label id="labelSubjectRexegPref" control="textboxSubjectRegexPref">&subjectregexpref.label;</label>
+    <textbox id="textboxSubjectRegexPref" preference="subjectregexpref"/>
 
     <label id="labelSenderRexegPref" control="textboxSenderRegexPref">&senderregexpref.label;</label>
     <textbox id="textboxSenderRegexPref" preference="senderregexpref"/>

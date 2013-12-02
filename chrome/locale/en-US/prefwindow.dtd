@@ -5,5 +5,6 @@
 <!ENTITY sendtest.button "Send Test message">
 <!ENTITY maxmailnotificationspref.label "Summarize new email if more than: ">
 <!ENTITY maxrssnotificationspref.label "Summarize new feed items if more than: ">
-<!ENTITY folderregexpref.label "Regex to EXCLUDE folders: ">
-<!ENTITY senderregexpref.label "Regex to EXCLUDE senders: ">
+<!ENTITY folderregexpref.label "Regex to EXCLUDE by folder name: ">
+<!ENTITY senderregexpref.label "Regex to EXCLUDE by sender: ">
+<!ENTITY subjectregexpref.label "Regex to EXCLUDE by subject: ">
