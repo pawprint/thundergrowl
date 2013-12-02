@@ -28,7 +28,7 @@ var growlgntp = function () {
 		catch (e) {
 			Components.utils.reportError("growlgntp-thunderbird EXCEPTION: " + e.toString());
 		}
-	}
+	};
 
 	function processQueue(queue) {
 		try {
@@ -40,11 +40,11 @@ var growlgntp = function () {
 		catch (e) {
 			Components.utils.reportError("growlgntp-thunderbird EXCEPTION: " + e.toString());
 		}
-	}
+	};
 
 	function doNotification(type, title, message, callbackContext, callbackType, priority) {
 		growl.notify(growlgntp.APPNAME, type, title, message, callbackContext, callbackType, priority);
-	}
+	};
 
   let classifiedMailListener = {
     QueryInterface: XPCOMUtils.generateQI([Components.interfaces.nsIMsgFolderListener]),
@@ -58,13 +58,11 @@ var growlgntp = function () {
 	var newMailListener = {
 		itemAdded: function (item) {
 			processNewItem(item);
-		}/*,
-		msgAdded: function (item) {
-			processNewItem(item);
-		}*/
-	}
+		}
+	};
 
 	function processNewItem(item, pMsg) {
+    var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("growlgntp-thunderbird.");
     var vState = "Added";
     var msg = null;
 		try {
@@ -77,9 +75,9 @@ var growlgntp = function () {
 			if (msg.isRead) return;
 
       var folder = msg.folder;
-      var junkscore = msg.getStringProperty("junkscore");
+      //var junkscore = msg.getStringProperty("junkscore");
 
-      if(junkscore > 50) return;
+      //if(junkscore > 50) return;
       if(folder.isSpecialFolder((nsMsgFolderFlags.Drafts|nsMsgFolderFlags.Trash|nsMsgFolderFlags.Junk|nsMsgFolderFlags.Sent), false)) return;
 
 			var uri = msg.folder.getUriForMsg(msg);
@@ -94,13 +92,47 @@ var growlgntp = function () {
 
 				growlgntp.rssqueue.push({ type: "newrss", title: "New Post: "+folder.prettiestName+": ", message: msg.mime2DecodedSubject, callbackContext: uri, callbackType: "rss" });
 				growlgntp.newrsstimer = window.setTimeout(growlgntp.processRssQueue, 1000);
-			}
-			else {
+			}else {
 				if (growlgntp.newmailtimer) window.clearTimeout(growlgntp.newmailtimer);
 
 				var author = msg.mime2DecodedAuthor;
-				var regex = /<([^>]*)>|"*([^<>"]*)/;
-				var match = regex.exec(author);
+        var subject = msg.mime2DecodedSubject;
+
+        var regex = /<([^>]*)>|"*([^<>"]*)/;
+        var match = regex.exec(author);
+
+dump("growl: Applying Filters");
+        try {
+          if(prefs.prefHasUserValue("folderregexpref")) {
+            var rxFolder  = prefs.getCharPref("folderregexpref");
+            if(rxFolder) {
+  dump("growl: Folders Filter "+rxFolder);
+              var rxpFolder = new RegExp(rxFolder);
+              if(rxpFolder.exec(folder.prettiestName)) return;
+            }
+          }
+
+          if(prefs.prefHasUserValue("senderregexpref")) {
+            var rxSender  = prefs.getCharPref("senderregexpref");
+            if(rxSender) {
+  dump("growl: Filtering Senders "+rxSender);
+              var rxpSender = new RegExp(rxSender);
+              if(rxpSender.exec(author)) return;
+            }
+          }
+
+          if(prefs.prefHasUserValue("subjectregexpref")) {
+            var rxSubject = prefs.getCharPref("subjectregexpref");
+            if(rxSubject) {
+  dump("growl: Filtering Subjects "+rxSubject);
+              var rxpSubject = new RegExp(rxSubject);
+              if(rxpSubject.exec(subject)) return;
+            }
+          }
+        } catch(e) {
+          dump(e);
+        }
+
 				if (match) author = match[1] || match[2];
 
 				// Thunderbird priorities 0 & 1 are treated as 'normal'
@@ -109,17 +141,14 @@ var growlgntp = function () {
 					priority = msg.priority - 4;    // Thunderbird values are 2 thru 6, Growl values are -2 thru 2
 				}
 
-if (folder.prettiestName == "Roz") return;//This needs to be a preference later
-
-				growlgntp.mailqueue.push({ type: "newmail", title: "New Email: "+folder.prettiestName, message: "From: "+author+". "+msg.mime2DecodedSubject, priority: priority, callbackContext: uri, callbackType: "mail" });
-				//growlgntp.mailqueue.push({ type: "newmail", title: "New Email "+folder.prettiestName, message: author, priority: priority, callbackContext: uri, callbackType: "mail" });
+				growlgntp.mailqueue.push({ type: "newmail", title: "New Email: "+folder.prettiestName, message: "From: "+author+". "+subject, priority: priority, callbackContext: uri, callbackType: "mail" });
 				growlgntp.newmailtimer = window.setTimeout(growlgntp.processMailQueue, 1000);
 			}
 		}
 		catch (e) {
 			Components.utils.reportError("growlgntp-thunderbird EXCEPTION: " + e.toString());
-		}
-	}
+		};
+	};
 
 	return {
 		newmailtimer: null,
