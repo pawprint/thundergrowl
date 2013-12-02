@@ -1,4 +1,4 @@
-thundergrowl
+ThunderGrowl
 ============
 
 Updated Growl Extension for Thunderbird - This extension was forked from the work of brian dunnington part of the growl for windows addons site.
@@ -13,3 +13,5 @@ I found it much in need of a few enhancements and work on it seemed to have stop
 
 
 Please feel free to contribute ideas and patches. Not being anything close to a XPCOM hacker what is possible to implement may be limited.
+
+If you just want the current packaged extension just take the latest thundergrowl.xpi file in the build folder. 
