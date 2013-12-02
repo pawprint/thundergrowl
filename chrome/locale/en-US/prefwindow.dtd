@@ -1,7 +1,9 @@
-<!ENTITY prefwindow.title "Growl/GNTP preferences">
-<!ENTITY pane1.title "Growl/GNTP preferences">
+<!ENTITY prefwindow.title "ThunderGrowl preferences">
+<!ENTITY pane1.title "ThunderGrowl preferences">
 <!ENTITY passwordpref.label "Password:">
 <!ENTITY reregister.button "Re-register Growl">
 <!ENTITY sendtest.button "Send Test message">
 <!ENTITY maxmailnotificationspref.label "Summarize new email if more than: ">
 <!ENTITY maxrssnotificationspref.label "Summarize new feed items if more than: ">
+<!ENTITY folderregexpref.label "Regex to EXCLUDE folders: ">
+<!ENTITY senderregexpref.label "Regex to EXCLUDE senders: ">

@@ -28,7 +28,7 @@ var growlgntp = function () {
 		catch (e) {
 			Components.utils.reportError("growlgntp-thunderbird EXCEPTION: " + e.toString());
 		}
-	}
+	};
 
 	function processQueue(queue) {
 		try {
@@ -40,11 +40,11 @@ var growlgntp = function () {
 		catch (e) {
 			Components.utils.reportError("growlgntp-thunderbird EXCEPTION: " + e.toString());
 		}
-	}
+	};
 
 	function doNotification(type, title, message, callbackContext, callbackType, priority) {
 		growl.notify(growlgntp.APPNAME, type, title, message, callbackContext, callbackType, priority);
-	}
+	};
 
   let classifiedMailListener = {
     QueryInterface: XPCOMUtils.generateQI([Components.interfaces.nsIMsgFolderListener]),
@@ -58,11 +58,8 @@ var growlgntp = function () {
 	var newMailListener = {
 		itemAdded: function (item) {
 			processNewItem(item);
-		}/*,
-		msgAdded: function (item) {
-			processNewItem(item);
-		}*/
-	}
+		}
+	};
 
 	function processNewItem(item, pMsg) {
     var vState = "Added";
@@ -98,9 +95,23 @@ var growlgntp = function () {
 			else {
 				if (growlgntp.newmailtimer) window.clearTimeout(growlgntp.newmailtimer);
 
-				var author = msg.mime2DecodedAuthor;
-				var regex = /<([^>]*)>|"*([^<>"]*)/;
-				var match = regex.exec(author);
+				var author = msg.mime2DecodedAuthor,
+            regex = /<([^>]*)>|"*([^<>"]*)/,
+            match = regex.exec(author);
+            rxFolder = prefs.getStringPref("growlgntp-thunderbird.folderregexpref"),
+            rxSender = prefs.getStringPref("growlgntp-thunderbird.senderregexpref");
+
+        if(rxFolder != '') {
+          var rxpFolder = new RegExp(rxFolder);
+          if(rxpFolder.exec(folder.prettiestName)) return;
+        }
+
+        if(rxSender != '') {
+          var rxpSender = new RegExp(rxSender);
+          if(rxpSender.exec(author)) return;
+        }
+
+
 				if (match) author = match[1] || match[2];
 
 				// Thunderbird priorities 0 & 1 are treated as 'normal'
@@ -109,8 +120,6 @@ var growlgntp = function () {
 					priority = msg.priority - 4;    // Thunderbird values are 2 thru 6, Growl values are -2 thru 2
 				}
 
-if (folder.prettiestName == "Roz") return;//This needs to be a preference later
-
 				growlgntp.mailqueue.push({ type: "newmail", title: "New Email: "+folder.prettiestName, message: "From: "+author+". "+msg.mime2DecodedSubject, priority: priority, callbackContext: uri, callbackType: "mail" });
 				//growlgntp.mailqueue.push({ type: "newmail", title: "New Email "+folder.prettiestName, message: author, priority: priority, callbackContext: uri, callbackType: "mail" });
 				growlgntp.newmailtimer = window.setTimeout(growlgntp.processMailQueue, 1000);
@@ -118,8 +127,8 @@ if (folder.prettiestName == "Roz") return;//This needs to be a preference later
 		}
 		catch (e) {
 			Components.utils.reportError("growlgntp-thunderbird EXCEPTION: " + e.toString());
-		}
-	}
+		};
+	};
 
 	return {
 		newmailtimer: null,
