@@ -1,0 +1,7 @@
+content	growlgntp-thunderbird	chrome/content/
+locale	growlgntp-thunderbird	en-US chrome/locale/en-US/
+overlay chrome://messenger/content/messenger.xul chrome://growlgntp-thunderbird/content/messengerOverlay.xul
+# this is for FF4 support
+component {98405d40-3a60-11de-8a39-0800200c9a66} components/growlgntp.js
+contract @growlforwindows.com/growlgntp;1 {98405d40-3a60-11de-8a39-0800200c9a66}
+category profile-after-change Growl @growlforwindows.com/growlgntp;1

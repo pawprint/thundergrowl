@@ -1,0 +1,7 @@
+<!ENTITY prefwindow.title "Growl/GNTP preferences">
+<!ENTITY pane1.title "Growl/GNTP preferences">
+<!ENTITY passwordpref.label "Password:">
+<!ENTITY reregister.button "Re-register Growl">
+<!ENTITY sendtest.button "Send Test message">
+<!ENTITY maxmailnotificationspref.label "Summarize new email if more than: ">
+<!ENTITY maxrssnotificationspref.label "Summarize new feed items if more than: ">

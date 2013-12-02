@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<RDF:RDF xmlns="http://www.mozilla.org/2004/em-rdf#"
+         xmlns:RDF="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <RDF:Description about="urn:mozilla:install-manifest">
+    <id>growlgntp-thunderbird@brian.dunnington</id>
+    <name>Growl/GNTP</name>
+    <description>Sends GNTP (Growl) notifications when events occur</description>
+    <version>1.2.6</version>
+    <creator>brian dunnington</creator>
+    <homepageURL>http://www.growlforwindows.com/gfw/plugins/thunderbird</homepageURL>
+    <iconURL>chrome://growlgntp-thunderbird/content/growlgntp.png</iconURL>
+    <optionsURL>chrome://growlgntp-thunderbird/content/options.xul</optionsURL>
+    <unpack>true</unpack>
+
+    <targetApplication>
+      <RDF:Description>
+        <id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</id>
+        <minVersion>2.0</minVersion>
+        <maxVersion>25.*</maxVersion>
+      </RDF:Description>
+    </targetApplication>
+
+    <targetApplication>
+      <!-- Postbox -->
+      <RDF:Description>
+        <id>postbox@postbox-inc.com</id>
+        <minVersion>1.0b15</minVersion>
+        <maxVersion>2.*</maxVersion>
+      </RDF:Description>
+    </targetApplication>
+    
+  </RDF:Description>
+</RDF:RDF>
