@@ -33,11 +33,14 @@ Filters are case sensitive regular expressions set against either the:
 If you are not familiar with regular expressions here are a few simple examples that may help. 
 
 To EXCLUDE all messages that have a subject that includes the word "trigger" (remember it's case sensitive) enter the following into the subject filter
-```trigger```
+```
+trigger
+```
 
 To EXCLUDE all messages that arrive in either the "exmaple1" folder AND the "example2" folder  enter the following into the folder filter
-```example1|example2```
-
+```
+example1|example2
+```
 
 
 Junk, Sent, Trash, and Drafts folders are all automatically excluded. That means in general you do not need to worry about excluding spam.
