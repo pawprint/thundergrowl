@@ -106,7 +106,7 @@ dump("growl: Applying Filters");
           if(prefs.prefHasUserValue("folderregexpref")) {
             var rxFolder  = prefs.getCharPref("folderregexpref");
             if(rxFolder) {
-  dump("growl: Folders Filter "+rxFolder);
+dump("growl: Folders Filter "+rxFolder);
               var rxpFolder = new RegExp(rxFolder);
               if(rxpFolder.exec(folder.prettiestName)) return;
             }
@@ -115,7 +115,7 @@ dump("growl: Applying Filters");
           if(prefs.prefHasUserValue("senderregexpref")) {
             var rxSender  = prefs.getCharPref("senderregexpref");
             if(rxSender) {
-  dump("growl: Filtering Senders "+rxSender);
+dump("growl: Filtering Senders "+rxSender);
               var rxpSender = new RegExp(rxSender);
               if(rxpSender.exec(author)) return;
             }
@@ -124,7 +124,7 @@ dump("growl: Applying Filters");
           if(prefs.prefHasUserValue("subjectregexpref")) {
             var rxSubject = prefs.getCharPref("subjectregexpref");
             if(rxSubject) {
-  dump("growl: Filtering Subjects "+rxSubject);
+dump("growl: Filtering Subjects "+rxSubject);
               var rxpSubject = new RegExp(rxSubject);
               if(rxpSubject.exec(subject)) return;
             }
